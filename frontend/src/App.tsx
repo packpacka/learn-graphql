@@ -4,9 +4,18 @@ import { config } from "./config";
 
 function App() {
   const handleClick = async () => {
-    const res = await fetch(config.baseApiUrl + "/request");
-    const data = await res.json();
-    console.log(data);
+    const res = await fetch(config.baseApiUrl + "/graphql?", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json;charset=utf-8"
+      },
+      body: JSON.stringify({ query: "{\n  message\n}", variables: null })
+    });
+    const {
+      data: { message }
+    } = await res.json();
+    alert(message);
   };
   return (
     <div className="App">
