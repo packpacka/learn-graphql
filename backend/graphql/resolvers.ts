@@ -13,4 +13,11 @@ export const rootResolver = () => ({
       };
     });
   },
+  deletePost: ({ id }: { id: string }) => {
+    return Post.findById(id)
+      .remove()
+      .then(() => {
+        return true;
+      });
+  },
 });

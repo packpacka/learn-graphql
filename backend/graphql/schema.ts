@@ -16,6 +16,7 @@ type RootQuery {
 
 type RootMutation {
   addPost(post: CreatePostRequest): Post
+  deletePost(id: String): Boolean
 }
 
 schema {
