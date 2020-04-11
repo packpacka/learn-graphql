@@ -1,23 +1,30 @@
 import express from "express";
 import cors from "cors";
 import { createGraphQlEndpoint } from "./graphql/createEndpoint";
+import { connectDB } from "./db/connectDB";
 
 const PORT = 5000;
 
 const app = express();
 
-app.use(cors());
+const startSertver = async () => {
+  const db = await connectDB();
 
-app.get("/request", (req, res) => {
-  res.json({ test: "helloWorld1" });
-});
+  app.get("/request", (req, res) => {
+    res.json({ test: "helloWorld1" });
+  });
 
-app.use("/graphql", createGraphQlEndpoint({ graphiql: true }));
-// start the app
-app.listen(PORT, error => {
-  if (error) {
-    return console.log("something bad happened", error);
-  }
+  app.use("/graphql", createGraphQlEndpoint({ graphiql: true }));
 
-  console.log("listening on " + PORT + "...");
-});
+  app.use(cors());
+
+  app.listen(PORT, (error) => {
+    if (error) {
+      return console.log("something bad happened", error);
+    }
+
+    console.log("listening on " + PORT + "...");
+  });
+};
+
+startSertver();

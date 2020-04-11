@@ -1,20 +1,16 @@
-import uniqueId from "lodash/uniqueId";
-
-const posts = [
-  {
-    id: uniqueId(),
-    text: "Some post text",
-  },
-];
+import { Post } from "../db/models/post";
 
 export const rootResolver = () => ({
-  posts: () => posts,
+  posts: () => Post.find(),
   addPost: ({ post }: { post: { text: string } }) => {
-    const newPost = {
-      id: uniqueId(),
+    const newPost = new Post({
       ...post,
-    };
-    posts.push(newPost);
-    return newPost;
+    });
+    return newPost.save().then((res) => {
+      return {
+        id: res.id,
+        text: res.text,
+      };
+    });
   },
 });
