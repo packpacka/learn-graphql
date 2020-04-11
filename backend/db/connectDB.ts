@@ -1,8 +1,14 @@
 import mongoose from "mongoose";
 
 const connectionString =
-  "mongodb+srv://DBAdmin:Jt0PNvU6AerBsiBn@cluster0-xyiag.mongodb.net/test?retryWrites=true&w=majority";
+  "mongodb+srv://cluster0-xyiag.mongodb.net/";
 
 export const connectDB = async () => {
-  await mongoose.connect(connectionString);
+  await mongoose.connect(connectionString, {
+    dbName: 'test',
+    user: 'DBAdmin',
+    pass: '1e0JQ6cBLrk8MTnP',
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
 };
