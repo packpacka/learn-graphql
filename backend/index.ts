@@ -12,9 +12,7 @@ app.get("/request", (req, res) => {
   res.json({ test: "helloWorld1" });
 });
 
-app.get("/graphql", createGraphQlEndpoint({ graphiql: true }));
-app.post("/graphql", createGraphQlEndpoint({ graphiql: false }));
-
+app.use("/graphql", createGraphQlEndpoint({ graphiql: true }));
 // start the app
 app.listen(PORT, error => {
   if (error) {

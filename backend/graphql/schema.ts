@@ -1,7 +1,25 @@
-import fs from "fs";
-import path from "path";
 import { buildSchema } from "graphql";
 
-export const schema = buildSchema(
-  fs.readFileSync(path.join(__dirname, "schema.graphql")).toString()
-);
+export const schema = buildSchema(`
+type Post {
+  id: String!
+  text: String!
+}
+
+input CreatePostRequest {
+  text: String!
+}
+
+type RootQuery {
+  posts: [Post!]
+}
+
+type RootMutation {
+  addPost(post: CreatePostRequest): Post
+}
+
+schema {
+  query: RootQuery,
+  mutation: RootMutation
+}
+`);
