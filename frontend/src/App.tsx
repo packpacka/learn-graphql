@@ -6,8 +6,16 @@ import { useQuery, gql } from "@apollo/client";
 function App() {
   const { loading, error, data } = useQuery(
     gql`
-      query message {
-        message
+      query AllPosts {
+        posts {
+          id
+          text
+          authorId
+          author {
+            id
+            login
+          }
+        }
       }
     `
   );

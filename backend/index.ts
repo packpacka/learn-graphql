@@ -10,6 +10,8 @@ const app = express();
 const startSertver = async () => {
   await connectDB();
 
+  app.use(cors());
+
   app.get("/request", (req, res) => {
     res.json({ test: "helloWorld1" });
   });
@@ -18,7 +20,6 @@ const startSertver = async () => {
   app.post("/graphql", createGraphQlEndpoint({ graphiql: false }));
   // app.use("/graphql", createGraphQlEndpoint({ graphiql: true }));
 
-  app.use(cors());
 
   app.listen(PORT, (error) => {
     if (error) {
