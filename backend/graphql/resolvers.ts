@@ -80,4 +80,5 @@ export const rootResolver = () => ({
         return true;
       });
   },
+  message: () => 'Hellow'
 });

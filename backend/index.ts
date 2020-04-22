@@ -8,13 +8,15 @@ const PORT = 5000;
 const app = express();
 
 const startSertver = async () => {
-  const db = await connectDB();
+  await connectDB();
 
   app.get("/request", (req, res) => {
     res.json({ test: "helloWorld1" });
   });
 
-  app.use("/graphql", createGraphQlEndpoint({ graphiql: true }));
+  app.get("/graphql", createGraphQlEndpoint({ graphiql: true }));
+  app.post("/graphql", createGraphQlEndpoint({ graphiql: false }));
+  // app.use("/graphql", createGraphQlEndpoint({ graphiql: true }));
 
   app.use(cors());
 

@@ -24,8 +24,9 @@ type User {
 }
 
 type RootQuery {
-  posts: [Post!]!,
+  posts: [Post!]!
   users: [User!]!
+  message: String!
 }
 
 type RootMutation {
