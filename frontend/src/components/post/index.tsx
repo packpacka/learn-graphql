@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { deletePostMutation, updatePostMutation } from '../../graphql/posts';
+import { deletePostMutation, updatePostMutation, postsQuery } from '../../graphql/posts';
 import { Post as PostType } from 'learn-graphql-backend/graphql/types';
 
 export const Post: React.FC<{ post: PostType }> = ({ post }) => {
-  const [deletePost] = useMutation(deletePostMutation);
+  const [deletePost] = useMutation(deletePostMutation, {
+    update: (cache, res) => {
+      const currentPosts =
+        cache.readQuery<{ posts: PostType[] }>({ query: postsQuery })?.posts || [];
+
+      cache.writeQuery({
+        query: postsQuery,
+        data: { posts: currentPosts.filter((p) => p.id !== res.data.deletePost) }, //TODO: как типизировать res?
+      });
+    },
+  });
   const [isEditMode, setEditMode] = useState(false);
   const [postText, setPostText] = useState<string>(post.text);
 

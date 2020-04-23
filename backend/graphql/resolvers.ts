@@ -1,7 +1,6 @@
 import { PostModel } from '../db/models/post';
 import { UserModel } from '../db/models/user';
-import { User, Post, CreatePostRequest, UpdatePostRequest, CreateUserRequest } from './types';
-import { defaultFieldResolver } from 'graphql';
+import { CreatePostRequest, UpdatePostRequest, CreateUserRequest } from './types';
 
 const userId = '5e91dfd5dbca598f1fafe041';
 
@@ -13,7 +12,7 @@ export const rootResolver = () => ({
           id: post.id,
           text: post.text,
           authorId: post.authorId,
-          author: (parent: any, context: any, info: any) => {
+          author: () => {
             return UserModel.findById(post.authorId).then((user) => {
               if (!user) {
                 return null;
@@ -40,13 +39,11 @@ export const rootResolver = () => ({
         text: post.text,
         authorId: post.authorId,
       };
-      console.log('add ok', res);
       return UserModel.findById(userId).then((user) => {
         if (user) {
           user.postIds.push(post.id);
           user.save().then(() => res);
         }
-        console.log('user add ok', res);
         return {
           ...res,
           author: user,
@@ -80,7 +77,7 @@ export const rootResolver = () => ({
   },
   deletePost: ({ id }: { id: string }) => {
     return PostModel.deleteOne({ _id: id }).then(() => {
-      return true;
+      return id;
     });
   },
 
@@ -101,7 +98,7 @@ export const rootResolver = () => ({
     return UserModel.findById(id)
       .remove()
       .then(() => {
-        return true;
+        return id;
       });
   },
 });

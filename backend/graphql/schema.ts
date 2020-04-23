@@ -37,9 +37,9 @@ type RootQuery {
 type RootMutation {
   addPost(post: CreatePostRequest): Post
   updatePost(post: UpdatePostRequest): Post
-  deletePost(id: String): Boolean
+  deletePost(id: String): String!
   addUser(user: CreateUserRequest): User
-  deleteUser(id: String): Boolean
+  deleteUser(id: String): String!
 }
 
 schema {
