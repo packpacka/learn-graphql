@@ -1,13 +1,44 @@
-import { gql } from "@apollo/client";
-import { client } from "./client";
+import { gql } from '@apollo/client';
 
-export const getPosts = () => {
-  return client.query({
-    query: gql`
-      query {
-        message
+export const postsQuery = gql`
+  query AllPosts {
+    posts {
+      id
+      text
+      authorId
+      author {
+        id
+        login
       }
-    `,
-    variables: null,
-  });
-};
+    }
+  }
+`;
+
+export const addPostMutation = gql`
+  mutation addPost($text: String!) {
+    addPost(post: { text: $text }) {
+      id
+      text
+      authorId
+      author {
+        id
+        login
+      }
+    }
+  }
+`;
+export const updatePostMutation = gql`
+  mutation updatePost($text: String!, $id: String!) {
+    updatePost(post: { text: $text, id: $id }) {
+      id
+      text
+      authorId
+    }
+  }
+`;
+
+export const deletePostMutation = gql`
+  mutation DeletePost($id: String!) {
+    deletePost(id: $id)
+  }
+`;

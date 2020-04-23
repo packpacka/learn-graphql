@@ -1,4 +1,4 @@
-import { buildSchema } from "graphql";
+import { buildSchema } from 'graphql';
 
 export const schema = buildSchema(`
 type Post {
@@ -9,6 +9,11 @@ type Post {
 }
 
 input CreatePostRequest {
+  text: String!
+}
+
+input UpdatePostRequest {
+  id: String!
   text: String!
 }
 
@@ -31,6 +36,7 @@ type RootQuery {
 
 type RootMutation {
   addPost(post: CreatePostRequest): Post
+  updatePost(post: UpdatePostRequest): Post
   deletePost(id: String): Boolean
   addUser(user: CreateUserRequest): User
   deleteUser(id: String): Boolean

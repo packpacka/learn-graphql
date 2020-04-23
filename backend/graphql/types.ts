@@ -14,6 +14,9 @@ export type Post = {
 export type CreatePostRequest = {
   post: { text: string };
 };
+export type UpdatePostRequest = {
+  post: { id: string; text: string };
+};
 
 export type CreateUserRequest = {
   user: { login: string; password: string };
