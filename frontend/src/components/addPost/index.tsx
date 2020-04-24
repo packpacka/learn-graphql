@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { addPostMutation, postsQuery } from '../../graphql/posts';
 import { Post } from 'learn-graphql-backend/graphql/types';
+import './styles.css';
+import { bem } from '../../utils/bem';
+
+const b = bem('add-post');
 
 export const AddPost: React.FC<{}> = () => {
   const [postText, setPostText] = useState<string>('');
@@ -28,8 +32,13 @@ export const AddPost: React.FC<{}> = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <textarea onChange={(e) => setPostText(e.target.value)} value={postText} />
+    <form onSubmit={handleSubmit} className={b()}>
+      <textarea
+        className={b('text-input')}
+        onChange={(e) => setPostText(e.target.value)}
+        value={postText}
+        placeholder='Напиши сюда текст своего сообщения'
+      />
       <button type="submit">Добавить</button>
     </form>
   );

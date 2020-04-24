@@ -1,0 +1,25 @@
+.post {
+  &__text {
+    font-size: 15px;
+    margin: 0;
+  }
+
+  &__author {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  &__buttons-block {
+    display: flex;
+    margin-top: 10px;
+  }
+
+  &__button {
+    margin-right: 10px;
+  }
+
+  &__text-input {
+    width: 100%;
+    marging-bottom: 10px;
+  }
+}

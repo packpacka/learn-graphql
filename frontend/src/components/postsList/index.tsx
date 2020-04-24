@@ -3,8 +3,16 @@ import { useQuery } from '@apollo/client';
 import { postsQuery } from '../../graphql/posts';
 import { Post as PostType } from 'learn-graphql-backend/graphql/types';
 import { Post } from '../post';
+import { bem } from '../../utils/bem';
 
-export const PostsList: React.FC<{}> = () => {
+import './styles.css';
+
+const b = bem('posts-list');
+
+type Props = {
+  isEditable?: boolean;
+};
+export const PostsList: React.FC<Props> = ({ isEditable }) => {
   const { loading, error, data } = useQuery<{ posts: PostType[] }>(postsQuery);
 
   if (loading) {
@@ -19,11 +27,11 @@ export const PostsList: React.FC<{}> = () => {
     );
   }
   return (
-    <ul>
+    <ul className={b()}>
       {data &&
         data.posts.map((post) => (
-          <li key={post.id}>
-            <Post post={post} />
+          <li key={post.id} className={b('item')}>
+            <Post post={post} isEditable={isEditable} />
           </li>
         ))}
     </ul>

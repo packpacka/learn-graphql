@@ -1,0 +1,6 @@
+.add-post {
+  &__text-input {
+    width: 100%;
+    marging-bottom: 10px;
+  }
+}
