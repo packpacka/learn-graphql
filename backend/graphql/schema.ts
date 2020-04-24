@@ -28,10 +28,11 @@ type User {
   postIds: [String]!
 }
 
+
 type RootQuery {
   posts: [Post!]!
   users: [User!]!
-  message: String!
+  login(login: String!, password: String!): User
 }
 
 type RootMutation {

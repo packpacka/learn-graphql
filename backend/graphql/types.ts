@@ -21,3 +21,8 @@ export type UpdatePostRequest = {
 export type CreateUserRequest = {
   user: { login: string; password: string };
 };
+
+export type LoginRequest = {
+  login: string;
+  password: string;
+};

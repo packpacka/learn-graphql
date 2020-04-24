@@ -1,6 +1,8 @@
 import { PostModel } from '../db/models/post';
 import { UserModel } from '../db/models/user';
-import { CreatePostRequest, UpdatePostRequest, CreateUserRequest } from './types';
+import { CreatePostRequest, UpdatePostRequest, CreateUserRequest, LoginRequest } from './types';
+import { authenticate } from '../auth';
+import * as bcrypt from 'bcryptjs';
 
 const userId = '5e91dfd5dbca598f1fafe041';
 
@@ -41,7 +43,7 @@ export const rootResolver = () => ({
       };
       return UserModel.findById(userId).then((user) => {
         if (user) {
-          user.postIds.push(post.id);
+          user.postIds.push(post._id);
           user.save().then(() => res);
         }
         return {
@@ -66,25 +68,33 @@ export const rootResolver = () => ({
         return UserModel.findById(userId).then((user) => {
           if (user) {
             user.postIds.push(post.id);
-            user.save().then(() => res);
+            return user.save().then(() => ({
+              ...res,
+              author: user,
+            }));
           }
-          return {
-            ...res,
-            author: user,
-          };
+          return res;
         });
       });
   },
   deletePost: ({ id }: { id: string }) => {
     return PostModel.deleteOne({ _id: id }).then(() => {
-      return id;
+      return UserModel.findById(userId).then((user) => {
+        if (user) {
+          user.postIds = user.postIds.filter((pId) => pId.toString() !== id);
+          return user.save().then(() => id);
+        }
+
+        return id;
+      });
     });
   },
 
   users: () => UserModel.find(),
-  addUser: ({ user }: { user: CreateUserRequest }) => {
+  addUser: ({ user }: CreateUserRequest) => {
     const newUser = new UserModel({
       ...user,
+      password: bcrypt.hashSync(user.password),
     });
     return newUser.save().then((res) => {
       return {
@@ -100,5 +110,23 @@ export const rootResolver = () => ({
       .then(() => {
         return id;
       });
+  },
+  login: ({ login, password }: LoginRequest, req: any) => {
+    return UserModel.findOne({ login }).then((user) => {
+      if (user) {
+        return bcrypt.compare(password, user.password).then((valid) => {
+          if (valid) {
+            authenticate({ userId: user._id, login: user.login }, req.res);
+
+            return {
+              id: user._id,
+              login: user.login,
+              postIds: user.postIds,
+            };
+          }
+        });
+      }
+      return null;
+    });
   },
 });
