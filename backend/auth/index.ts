@@ -13,11 +13,14 @@ export const authenticate = (data: AuthData, res: Response) => {
     expiresIn: '15min',
   });
   const refreshToken = sign(data, REFRESH_TOKEN_SECRET, {
-    expiresIn: '1d',
+    expiresIn: '7d',
   });
 
-  res.cookie(ACCESS_TOKEN_COOKIE, accessToken);
-  res.cookie(REFRESH_TOKEN_COOKIE, refreshToken);
+  res.cookie(ACCESS_TOKEN_COOKIE, accessToken, { httpOnly: true, maxAge: 60 * 15 * 1000 });
+  res.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 7 * 1000,
+  });
 };
 
 export const authMiddleware = (): RequestHandler => (req, res, next) => {
@@ -25,7 +28,7 @@ export const authMiddleware = (): RequestHandler => (req, res, next) => {
   const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE];
   if (!accessToken && !refreshToken) {
     next();
-    return;
+  return;
   }
 
   try {

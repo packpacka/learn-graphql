@@ -1,7 +1,7 @@
 import { PostModel } from '../db/models/post';
 import { UserModel } from '../db/models/user';
 import { CreatePostRequest, UpdatePostRequest, CreateUserRequest, LoginRequest } from './types';
-import { authenticate } from '../auth';
+import { authenticate, AuthData } from '../auth';
 import * as bcrypt from 'bcryptjs';
 
 const userId = '5e91dfd5dbca598f1fafe041';
@@ -100,7 +100,7 @@ export const rootResolver = () => ({
       return {
         id: res._id,
         login: res.login,
-        postIds: [],
+        postIds: res.postIds,
       };
     });
   },
@@ -128,5 +128,13 @@ export const rootResolver = () => ({
       }
       return null;
     });
+  },
+  me: (params: any, req: any) => {
+    const authData = req.authData as AuthData;
+
+    if (authData) {
+      return UserModel.findById(authData.userId);
+    }
+    return null;
   },
 });

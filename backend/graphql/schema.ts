@@ -33,6 +33,7 @@ type RootQuery {
   posts: [Post!]!
   users: [User!]!
   login(login: String!, password: String!): User
+  me: User
 }
 
 type RootMutation {

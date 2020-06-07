@@ -1,27 +1,14 @@
 import React from 'react';
-import './App.css';
-import { PostsList } from './components/postsList';
-import { AddPost } from './components/addPost';
-import { bem } from './utils/bem';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { PrivateRoute } from './components/privateRoute';
+import { MainPage } from './pages/main';
+import { LoginPage } from './pages/login';
 
-const b = bem('app');
-
-function App() {
+export function App() {
   return (
-    <div className={b()}>
-      <div className={b('grid')}>
-        <section>
-          <div className={b('add-post-form')}>
-            <AddPost />
-          </div>
-          <PostsList isEditable />
-        </section>
-        <section>
-          <PostsList />
-        </section>
-      </div>
-    </div>
+    <Router>
+      <PrivateRoute component={MainPage} path={'/'} exact />
+      <Route component={LoginPage} path={'/login'} />
+    </Router>
   );
 }
-
-export default App;
